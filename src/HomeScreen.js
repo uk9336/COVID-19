@@ -10,7 +10,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <View>
-                <Text style={{ fontSize: 30 }}>Splash</Text>
+                <Text style={{ fontSize: 30 }}>asdasda</Text>
                 <Button onPress={() => this.goHomeScreen()} title='Go' />
                 <Button onPress={() => fetchData()} title='Call Api' />
             </View >
