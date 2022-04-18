@@ -53,8 +53,18 @@
 	<false/>
 
 
-	<!--Include to allow HTTP requests-->
-	<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-	<true/>
+	<!--Include to allow HTTP requests--><key>NSAppTransportSecurity</key>
+  <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+      <key>NSExceptionDomains</key>
+      <dict>
+          <key>localhost</key>
+          <dict>
+              <key>NSExceptionAllowsInsecureHTTPLoads</key>
+              <true/>
+          </dict>
+      </dict>
+  </dict>
 </dict>
 </plist>

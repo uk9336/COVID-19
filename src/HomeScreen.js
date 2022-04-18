@@ -27,7 +27,8 @@ export default class HomeScreen extends Component {
 async function getData() {
     try {
         //응답 성공
-        const response = await axios.get('http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=Pxi1LhT%2FurofWToYgTNQ%2Bo3%2FyTxmtOuzIRh%2BErgjoZvDFcGjoqL%2BHKXZ5OtR3LKTbEzzPcxJDQe4hPxPPoBbPw%3D%3D&pageNo=0&numOfRows=10&startCreateDt=20220410&endCreateDt=20220411');
+        var apiKey = '8AGvK4G3WZpiMp1BW1S6oFQ%2F7xKf3zxlB3d6r6LRXslgH8Q7eJUSnP8%2FKd1BEpaQyieYG2aUbXiNzCW%2Ba0%2Bwaw%3D%3D'
+        const response = await axios.get('http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=' + apiKey + "&pageNo=0&numOfRows=10&startCreateDt=20220410&endCreateDt=20220411");
         var data = response.text()
         data.then((respo))
 
