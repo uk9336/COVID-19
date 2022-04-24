@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import SplashScreen from './src/SplashScreen';
-import HomeScreen from './src/HomeScreen';
-import DetailScreen from './src/DetailScreen';
+import SplashScreen from './src/screen/SplashScreen';
+import HomeScreen from './src/screen/HomeScreen';
+import DetailScreen from './src/screen/DetailScreen';
+import MainScreen from './src/screen/MainScreen';
 
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Navigator initialRouteName="MainScreen">
+        <Stack.Screen name="MainScreen" component={MainScreen} options={{ title: '메인화면' }} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ title: '로딩화면' }} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ title: '홈화면' }} />
         <Stack.Screen name="DetailScreen" component={DetailScreen} options={{ title: '상세화면' }} />
