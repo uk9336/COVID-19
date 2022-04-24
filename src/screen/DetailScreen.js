@@ -78,7 +78,7 @@ const DetailScreen = ({ navigation }) => {
                     <View style={{ flex: 1, alignItems: 'center' }}>
                         <TouchableOpacity style={styles.iconbutton} onPress={() => leftClick()}>
                             <Image
-                                source={require('./icon/ic_arrow_left.png')}
+                                source={require('../icon/ic_arrow_left.png')}
                             />
                         </TouchableOpacity>
                     </View>
@@ -88,7 +88,7 @@ const DetailScreen = ({ navigation }) => {
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={styles.iconbutton} onPress={() => rightClick()}>
                             <Image
-                                source={require('./icon/ic_arrow_right.png')}
+                                source={require('../icon/ic_arrow_right.png')}
                             />
                         </TouchableOpacity>
                     </View>
