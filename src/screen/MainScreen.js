@@ -29,59 +29,65 @@ export default class MainScreen extends React.Component {
         }
     }
 
-    callApi = (param) => {
-        console.log(param)
-        var url1 = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=%2FBaPnDu1M3YBVRNd3uRoaQTLrU1kt%2BuwdHk4Vl4Wf6F8N6n2pnOmoUNd7VQMW5YWaBv5G50KTJO3c5fYAZo%2FCw%3D%3D&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315'
-        var apiKey = '8AGvK4G3WZpiMp1BW1S6oFQ%2F7xKf3zxlB3d6r6LRXslgH8Q7eJUSnP8%2FKd1BEpaQyieYG2aUbXiNzCW%2Ba0%2Bwaw%3D%3D'
-        var urlSub = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey='
-            + apiKey
-            + '&pageNo=1'
-            + '&numOfRows=10';
-        var urlSub2 = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey='
-            + '%2FBaPnDu1M3YBVRNd3uRoaQTLrU1kt%2BuwdHk4Vl4Wf6F8N6n2pnOmoUNd7VQMW5YWaBv5G50KTJO3c5fYAZo%2FCw%3D%3D'
-            + '&pageNo=1'
-            + '&numOfRows=10';
-        axios.get(urlSub2 + '&' + 'startCreateDt=' + (param - 1) + '&endCreateDt=' + param)
-            // axios.get(url1)
-            // axios.get(url)
-            .then((res) => {
-                const result = res.data.response.body.items.item
-                console.log(result)
-                this.setState({ list: result }, () => {
-                    return;
-                })
-                // console.log(this.state.list)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
-    leftClick = () => {
-        var dateNumber = Number(this.state.date);
-        dateNumber--;
-        this.setState({ date: dateNumber })
-        this.callApi(dateNumber);
-    }
-
-    rightClick = () => {
-        var dateNumber = Number(this.state.date);
-        dateNumber++;
-        this.setState({ date: dateNumber })
-        this.callApi(dateNumber);
-    }
-
 
     render() {
 
-        this.callApi(this.state.date)
+        callApi = (param) => {
+            console.log(param)
+            // var url1 = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=%2FBaPnDu1M3YBVRNd3uRoaQTLrU1kt%2BuwdHk4Vl4Wf6F8N6n2pnOmoUNd7VQMW5YWaBv5G50KTJO3c5fYAZo%2FCw%3D%3D&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315'
+            // 지역별 데이터
+            var apiKey = '8AGvK4G3WZpiMp1BW1S6oFQ%2F7xKf3zxlB3d6r6LRXslgH8Q7eJUSnP8%2FKd1BEpaQyieYG2aUbXiNzCW%2Ba0%2Bwaw%3D%3D'
+            var urlSub = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey='
+                + apiKey
+                + '&pageNo=1'
+                + '&numOfRows=10';
+            var urlSub2 = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey='
+                + '%2FBaPnDu1M3YBVRNd3uRoaQTLrU1kt%2BuwdHk4Vl4Wf6F8N6n2pnOmoUNd7VQMW5YWaBv5G50KTJO3c5fYAZo%2FCw%3D%3D'
+                + '&pageNo=1'
+                + '&numOfRows=10';
+            axios.get(urlSub + '&' + 'startCreateDt=' + (param) + '&endCreateDt=' + param)
+                // axios.get(url1)
+                // axios.get(url)
+                .then((res) => {
+                    const result = res.data.response.body.items.item
+                    console.log(result)
+                    this.setState({ list: result }, () => {
+                        return;
+                    })
+                    // console.log(this.state.list)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+
+        leftClick = () => {
+            var dateNumber = Number(this.state.date);
+            dateNumber--;
+            this.setState({
+                date: dateNumber
+            })
+
+            callApi(dateNumber);
+        }
+
+        rightClick = () => {
+            var dateNumber = Number(this.state.date);
+            dateNumber++;
+            this.setState({
+                date: dateNumber
+            })
+
+            callApi(dateNumber);
+        }
+
 
         return (
             < SafeAreaView style={styles.container} >
                 <View style={{ flexDirection: 'column' }}>
                     <View style={styles.container, { padding: 20, flexDirection: 'row', width: '100%' }} >
                         <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={styles.iconbutton} onPress={this.leftClick}>
+                            <TouchableOpacity style={styles.iconbutton} onPress={leftClick}>
                                 <Image
                                     source={require('../icon/ic_arrow_left.png')}
                                 />
@@ -91,7 +97,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'black' }}>{this.state.date}</Text>
                         </View>
                         <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.iconbutton} onPress={this.rightClick}>
+                            <TouchableOpacity style={styles.iconbutton} onPress={rightClick}>
                                 <Image
                                     source={require('../icon/ic_arrow_right.png')}
                                 />
@@ -117,9 +123,9 @@ const renderItem = ({ item }) => (
     <View style={styles.item}>
         <Text style={styles.tv}>{item.deathCnt}</Text>
 
-        {/* <Text style={styles.tv}>{item.gubun}</Text> */}
+        <Text style={styles.tv}>{item.gubun}</Text>
         {/* <Text style={styles.tv}>{item.deathCnt}</Text> */}
-        {/* <Text style={styles.tv}>{item.incDec}</Text> */}
+        <Text style={styles.tv}>{item.incDec}</Text>
     </View>
 )
 
