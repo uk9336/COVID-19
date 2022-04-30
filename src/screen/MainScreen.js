@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View, Image, Text, Button, SafeAreaView, FlatList, StyleSheet, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-
+import * as dateInfo from '../common/DateInfo'
 const screenWidth = Dimensions.get("window").width;
 import { LineChart } from "react-native-chart-kit";
 
@@ -24,7 +24,7 @@ export default class MainScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            date: getToday(),
+            date: dateInfo.getToday(),
             list: []
         }
     }
@@ -149,13 +149,3 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 });
-
-
-function getToday() {
-    var d = new Date();
-    var year = d.getFullYear();
-    var month = ("0" + (1 + d.getMonth())).slice(-2);
-    var day = ("0" + d.getDate()).slice(-2);
-
-    return year + month + day;
-}
