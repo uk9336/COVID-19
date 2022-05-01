@@ -1,9 +1,10 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View, Image, Text, Button, SafeAreaView, FlatList, StyleSheet, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Image, Text, Button, SafeAreaView, FlatList, StyleSheet, StatusBar, Dimensions, TouchableOpacity, ScrollView, VirtualizedList } from 'react-native';
 import axios from 'axios';
 import * as dateInfo from '../common/DateInfo'
 const screenWidth = Dimensions.get("window").width;
 import { LineChart, BarChart } from "react-native-chart-kit";
+import { Appbar } from 'react-native-paper';
 
 // xml
 const converter = require("xml-js");
@@ -12,7 +13,6 @@ var parseString = require("react-native-xml2js").parseString;
 import SplashScreen from 'react-native-splash-screen'
 
 export default class MainScreen extends React.Component {
-
 
     componentDidMount() {
         setTimeout(() => {
@@ -67,12 +67,15 @@ export default class MainScreen extends React.Component {
                     var decideCntList = [];
                     result.forEach((i) => {
                         // decideCntList.push(i.decideCnt)
+                        if (i.stdDay.indexOf(dateInfo.getMonth() + "월 " + dateInfo.getDay() + "일") != -1) {
+                            cityList.push(i)
+                        }
                         if (i.gubun == "합계") {
                             incDecList.push(i.incDec)
                         }
                     })
                     this.setState({
-                        // city: cityList,
+                        city: cityList,
                         incDec: incDecList,
                         // decideCnt: decideCntList
                     })
@@ -112,9 +115,9 @@ export default class MainScreen extends React.Component {
          * LineChart
          */
         const chartConfig = {
-            backgroundGradientFrom: "#2C2929",
+            backgroundGradientFrom: "#1C1B1B",
             backgroundGradientFromOpacity: 1,
-            backgroundGradientTo: "#2C2929",
+            backgroundGradientTo: "#1C1B1B",
             backgroundGradientToOpacity: 1,
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -122,7 +125,7 @@ export default class MainScreen extends React.Component {
             barPercentage: 0.5,
         };
         const sample = {
-            labels: dateInfo.yesterday(),
+            labels: dateInfo.days7List(),
             datasets: [
                 {
                     data: this.state.incDec.reverse(),
@@ -135,29 +138,16 @@ export default class MainScreen extends React.Component {
 
         return (
             < SafeAreaView style={styles.container} >
-                <View style={{ flexDirection: 'column' }}>
-                    <View style={styles.container, { padding: 20, flexDirection: 'row', width: '100%' }} >
-                        {/* <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={styles.iconbutton} onPress={leftClick}>
-                                <Image
-                                    source={require('../icon/ic_arrow_left.png')}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flex: 2, alignItems: 'center' }}>
-                            <Text style={{ color: 'black' }}>{this.state.date}</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.iconbutton} onPress={rightClick}>
-                                <Image
-                                    source={require('../icon/ic_arrow_right.png')}
-                                />
-                            </TouchableOpacity>
-                        </View> */}
+                <ScrollView>
+                    <StatusBar backgroundColor="#2C2929" />
+                    <View style={styles.container_radius}>
                         <View>
-                            <Text style={styles.title}>코로나 발생 현황 조회</Text>
+                            <Text style={styles.title}>코로나바이러스감염증-19</Text>
+                            <View style={styles.space} />
+                            <Text style={styles.date}>{dateInfo.getMonth() + "월 " + dateInfo.getDay() + "일 00:00 기준"}</Text>
                         </View>
                     </View>
+                    <View style={styles.space_black} />
                     <BarChart
                         data={sample}
                         width={screenWidth}
@@ -168,35 +158,97 @@ export default class MainScreen extends React.Component {
                         showValuesOnTopOfBars={true}
                         withHorizontalLabels={false}
                     />
-                </View>
+                    <View style={styles.container_radius}>
+                        <View style={styles.space} />
+                        <Text style={styles.title_location}>지역별 확진자 현황</Text>
+                        <View style={styles.space} />
+                        {this.state.city.map((item, index) => (
+                            <View style={styles.item} key={index}>
+                                <Text style={styles.tv}>{item.gubun}</Text>
+                                <View style={styles.division_location}></View>
+                                <Text style={styles.tv}>{item.incDec}</Text>
+                            </View>
+                        ))}
+                    </View>
+                    <View style={styles.space_black} />
+                </ScrollView>
             </SafeAreaView >
         );
     }
 }
-
+/**
+ * Item
+ */
+const renderItem = ({ item }) => (
+    <View style={styles.item}>
+        <Text style={styles.tv}>{item.deathCnt}</Text>
+        <Text style={styles.tv}>{item.gubun}</Text>
+        <Text style={styles.tv}>{item.incDec}</Text>
+    </View>
+)
 
 
 const styles = StyleSheet.create({
+    space: {
+        height: 15,
+        backgroundColor: "#2c2929"
+    },
+    space_black: {
+        height: 15,
+        backgroundColor: "#1C1B1B"
+    },
     container: {
         flex: 1,
-        backgroundColor: "#2C2929"
+        backgroundColor: "#1C1B1B"
     },
     item: {
-        backgroundColor: '#000000',
         padding: 10,
         marginVertical: 3,
         marginHorizontal: 16,
+        flexDirection: 'column',
+        flex: 1,
+        flexDirection: "row",
+        flexWrap: "wrap",
     },
     tv: {
-        color: 'white'
+        color: 'white',
+        flex: 1,
+        fontSize: 20,
+        textAlign: 'center'
     },
     title: {
         fontSize: 32,
-        display: 'flex',
+        width: '100%',
         textAlign: 'center',
-        alignItems: 'center'
+        color: 'white'
     },
     iconbutton: {
         margin: 10,
     },
+    container_radius: {
+        backgroundColor: "#2c2929",
+        borderRadius: 20,
+        marginTop: 30,
+        marginLeft: 15,
+        padding: 15,
+        flex: 1,
+        marginRight: 15,
+    },
+    title_location: {
+        fontSize: 30,
+        flex: 1,
+        textAlign: 'center',
+        color: 'white'
+    },
+    division_location: {
+        width: 1,
+        height: 30,
+        backgroundColor: 'gray'
+    },
+    date: {
+        fontSize: 13,
+        flex: 1,
+        color: 'gray',
+        textAlign: 'right'
+    }
 });

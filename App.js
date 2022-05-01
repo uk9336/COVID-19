@@ -14,7 +14,10 @@ function App() {
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen name="MainScreen" component={MainScreen} options={{ title: '메인화면' }} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ title: '로딩화면' }} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ title: '' }} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{
+          title: 'COVID-19',
+          headerShown: false
+        }} />
         <Stack.Screen name="DetailScreen" component={DetailScreen} options={{ title: '상세화면' }} />
       </Stack.Navigator>
     </NavigationContainer>);
