@@ -1,10 +1,9 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View, Image, Text, Button, SafeAreaView, FlatList, StyleSheet, StatusBar, Dimensions, TouchableOpacity, ScrollView, VirtualizedList } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, StatusBar, Dimensions, ScrollView } from 'react-native';
 import axios from 'axios';
 import * as dateInfo from '../common/DateInfo'
 const screenWidth = Dimensions.get("window").width;
-import { LineChart, BarChart } from "react-native-chart-kit";
-import { Appbar } from 'react-native-paper';
+import { BarChart } from "react-native-chart-kit";
 
 // xml
 const converter = require("xml-js");
@@ -12,6 +11,11 @@ var parseString = require("react-native-xml2js").parseString;
 
 import SplashScreen from 'react-native-splash-screen'
 
+import * as baseApi from '../common/BaseApi';
+
+/**
+ * 코로나 현황 조회 화면
+ */
 export default class MainScreen extends React.Component {
 
     componentDidMount() {
@@ -19,7 +23,6 @@ export default class MainScreen extends React.Component {
             SplashScreen.hide();
         }, 1000)
 
-        dateInfo.days7();
         callApi(dateInfo.getToday());
     }
 
@@ -28,9 +31,8 @@ export default class MainScreen extends React.Component {
         this.state = {
             date: dateInfo.getToday(),
             list: [],
-            city: [],
-            incDec: [],
-            decideCnt: []
+            city: [], // 지역 리스트
+            incDec: [], // 확진자 수
         }
 
     }
@@ -38,35 +40,25 @@ export default class MainScreen extends React.Component {
 
     render() {
 
+        // 공공데이터 API 호출
         callApi = (param) => {
             // 지역별 데이터
-            var apiKey = '8AGvK4G3WZpiMp1BW1S6oFQ%2F7xKf3zxlB3d6r6LRXslgH8Q7eJUSnP8%2FKd1BEpaQyieYG2aUbXiNzCW%2Ba0%2Bwaw%3D%3D'
             var urlSub = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey='
-                + apiKey
+                + baseApi.baseUrl
                 + '&pageNo=1'
                 + '&numOfRows=10';
-            var urlSub2 = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey='
-                + '%2FBaPnDu1M3YBVRNd3uRoaQTLrU1kt%2BuwdHk4Vl4Wf6F8N6n2pnOmoUNd7VQMW5YWaBv5G50KTJO3c5fYAZo%2FCw%3D%3D'
-                + '&pageNo=1'
-                + '&numOfRows=10';
-            axios.get(urlSub + '&' + 'startCreateDt=' + (dateInfo.days7()) + '&endCreateDt=' + dateInfo.days1())
+            axios.get(urlSub
+                + '&startCreateDt=' + (dateInfo.ago6Day())
+                + '&endCreateDt=' + dateInfo.ago1Day())
                 .then((res) => {
-                    const all = res.data
+
+                    // response data
                     const result = res.data.response.body.items.item
-                    const asd = res.data.response.body.items.item.gubun
-                    console.log("전체")
-                    // console.log(result)
-                    // console.log(result)
-                    this.setState({
-                        list: result,
-                        // city: result.gubun,
-                        // count: result.incDec
-                    });
+
                     var cityList = [];
                     var incDecList = [];
-                    var decideCntList = [];
+
                     result.forEach((i) => {
-                        // decideCntList.push(i.decideCnt)
                         if (i.stdDay.indexOf(dateInfo.getMonth() + "월 " + dateInfo.getDay() + "일") != -1) {
                             cityList.push(i)
                         }
@@ -77,38 +69,11 @@ export default class MainScreen extends React.Component {
                     this.setState({
                         city: cityList,
                         incDec: incDecList,
-                        // decideCnt: decideCntList
                     })
-                    // console.log(this.state.incDec)
                 })
                 .catch((error) => {
                     callApi(dateInfo.getToday());
-                    // console.log(error)
                 })
-            console.log('-----')
-            console.log(dateInfo.days7())
-            console.log(dateInfo.days1())
-            console.log('-----')
-        }
-
-        leftClick = () => {
-            var dateNumber = Number(this.state.date);
-            dateNumber--;
-            this.setState({
-                date: dateNumber
-            })
-
-            callApi(dateNumber);
-        }
-
-        rightClick = () => {
-            var dateNumber = Number(this.state.date);
-            dateNumber++;
-            this.setState({
-                date: dateNumber
-            })
-
-            callApi(dateNumber);
         }
 
         /**
@@ -162,6 +127,7 @@ export default class MainScreen extends React.Component {
                         <View style={styles.space} />
                         <Text style={styles.title_location}>지역별 확진자 현황</Text>
                         <View style={styles.space} />
+
                         {this.state.city.map((item, index) => (
                             <View style={styles.item} key={index}>
                                 <Text style={styles.tv}>{item.gubun}</Text>
@@ -176,18 +142,10 @@ export default class MainScreen extends React.Component {
         );
     }
 }
+
 /**
- * Item
+ * StyleSheet
  */
-const renderItem = ({ item }) => (
-    <View style={styles.item}>
-        <Text style={styles.tv}>{item.deathCnt}</Text>
-        <Text style={styles.tv}>{item.gubun}</Text>
-        <Text style={styles.tv}>{item.incDec}</Text>
-    </View>
-)
-
-
 const styles = StyleSheet.create({
     space: {
         height: 15,
