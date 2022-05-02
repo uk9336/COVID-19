@@ -1,11 +1,11 @@
 export function getMonth() {
     var d = new Date();
-    var month = ("0" + (1 + d.getMonth())).slice(-2);
+    var month = ("0" + (1 + new Date(new Date().setDate(new Date().getDate() - 1)).getMonth())).slice(-2);
     return month;
 }
 export function getDay() {
     var d = new Date();
-    var day = ("0" + d.getDate()).slice(-2);
+    var day = ("0" + new Date(new Date().setDate(new Date().getDate() - 1)).getDate()).slice(-2);
     return day;
 }
 
@@ -34,13 +34,13 @@ export function addTime() {
 export function days7List() {
     var list = []
     var now = new Date()
+    list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 8)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 8)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 7)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 7)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 6)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 6)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 5)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 5)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 4)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 4)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 3)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 3)).getDate()).slice(-2))
     list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 2)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 2)).getDate()).slice(-2))
-    list.push(("0" + (1 + new Date(new Date().setDate(now.getDate() - 1)).getMonth())).slice(-2) + "." + ("0" + new Date(new Date().setDate(now.getDate() - 1)).getDate()).slice(-2))
     return list
 }
 
@@ -49,9 +49,9 @@ export function days7List() {
  */
 export function ago6Day() {
     var now = new Date()
-    var year = new Date(new Date().setDate(now.getDate() - 6)).getFullYear()
-    var month = ("0" + (1 + new Date(new Date().setDate(now.getDate() - 6)).getMonth())).slice(-2);
-    var day = ("0" + new Date(new Date().setDate(now.getDate() - 6)).getDate()).slice(-2);
+    var year = new Date(new Date().setDate(now.getDate() - 7)).getFullYear()
+    var month = ("0" + (1 + new Date(new Date().setDate(now.getDate() - 7)).getMonth())).slice(-2);
+    var day = ("0" + new Date(new Date().setDate(now.getDate() - 7)).getDate()).slice(-2);
     return (year + "" + month + "" + day)
 }
 
@@ -61,8 +61,8 @@ export function ago6Day() {
 export function ago1Day() {
     var now = new Date()
     var year = new Date(new Date().setDate(now.getDate())).getFullYear()
-    var month = ("0" + (1 + new Date(new Date().setDate(now.getDate())).getMonth())).slice(-2);
-    var day = ("0" + new Date(new Date().setDate(now.getDate())).getDate()).slice(-2);
+    var month = ("0" + (1 + new Date(new Date().setDate(now.getDate() - 1)).getMonth())).slice(-2);
+    var day = ("0" + new Date(new Date().setDate(now.getDate() - 1)).getDate()).slice(-2);
     // console.log(year + month + day)
     return (year + "" + month + "" + day)
 }

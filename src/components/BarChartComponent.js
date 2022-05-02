@@ -15,7 +15,7 @@ const BarChartComponent = (props) => {
                 labels: dateInfo.days7List(),
                 datasets: [
                     {
-                        data: props.incDec,
+                        data: props.incDec.reverse(),
                         strokeWidth: 3 // optional
                     }
                 ],
