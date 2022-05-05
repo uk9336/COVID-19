@@ -49,8 +49,8 @@ export default class MainScreen extends React.Component {
             + baseApi.baseUrl
             + '&pageNo=1'
             + '&numOfRows=10'
-            + '&startCreateDt=' + (dateInfo.ago6Day())
-            + '&endCreateDt=' + dateInfo.ago1Day())
+            + '&startCreateDt=' + (dateInfo.agoDay(7))
+            + '&endCreateDt=' + dateInfo.agoDay(0))
             .then((res) => {
                 // response data
                 const result = res.data.response.body.items.item
