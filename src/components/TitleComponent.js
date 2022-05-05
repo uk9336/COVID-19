@@ -14,7 +14,6 @@ const TitleComponent = () => {
                 <View style={commonStyles.space} />
                 <Text style={styles.date}>{dateInfo.getMonth() + "월 " + dateInfo.getDay() + "일 00:00 기준"}</Text>
             </View>
-            <View style={commonStyles.space} />
         </View>
     )
 }
